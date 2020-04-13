@@ -47,11 +47,12 @@ type cloudwatchData struct {
 func createCloudwatchSession(region *string, roleArn string) *cloudwatch.CloudWatch {
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
 		SharedConfigState: session.SharedConfigEnable,
+		Config: aws.Config{CredentialsChainVerboseErrors: aws.Bool(true)},
 	}))
 
 	maxCloudwatchRetries := 5
 
-	config := &aws.Config{Region: region, MaxRetries: &maxCloudwatchRetries}
+	config := &aws.Config{Region: region, MaxRetries: &maxCloudwatchRetries, CredentialsChainVerboseErrors: aws.Bool(true)}
 
 	if *debug {
 		config.LogLevel = aws.LogLevel(aws.LogDebugWithHTTPBody)

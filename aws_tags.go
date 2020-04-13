@@ -29,12 +29,14 @@ type tagsInterface struct {
 }
 
 func createTagSession(region *string, roleArn string) *r.ResourceGroupsTaggingAPI {
-	sess, err := session.NewSession()
+	sess, err := session.NewSessionWithOptions(session.Options{
+		Config: aws.Config{CredentialsChainVerboseErrors: aws.Bool(true)},
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
 	maxResourceGroupTaggingRetries := 5
-	config := &aws.Config{Region: region, MaxRetries: &maxResourceGroupTaggingRetries}
+	config := &aws.Config{Region: region, MaxRetries: &maxResourceGroupTaggingRetries, CredentialsChainVerboseErrors: aws.Bool(true)}
 	if roleArn != "" {
 		config.Credentials = stscreds.NewCredentials(sess, roleArn)
 	}
@@ -43,12 +45,14 @@ func createTagSession(region *string, roleArn string) *r.ResourceGroupsTaggingAP
 }
 
 func createASGSession(region *string, roleArn string) autoscalingiface.AutoScalingAPI {
-	sess, err := session.NewSession()
+	sess, err := session.NewSessionWithOptions(session.Options{
+		Config: aws.Config{CredentialsChainVerboseErrors: aws.Bool(true)},
+	})
 	if err != nil {
 		log.Fatal(err)
 	}
 	maxAutoScalingAPIRetries := 5
-	config := &aws.Config{Region: region, MaxRetries: &maxAutoScalingAPIRetries}
+	config := &aws.Config{Region: region, MaxRetries: &maxAutoScalingAPIRetries, CredentialsChainVerboseErrors: aws.Bool(true)}
 	if roleArn != "" {
 		config.Credentials = stscreds.NewCredentials(sess, roleArn)
 	}
